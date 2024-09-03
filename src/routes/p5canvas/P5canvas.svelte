@@ -1,6 +1,43 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { writable } from "svelte/store";
+  import { writable, type Writable } from "svelte/store";
+  import { Socket, Channel } from "phoenix";
+
+  let channel: Channel;
+
+  function connectSocket() {
+    console.log("connecting to socket canvas");
+    let socket = new Socket(import.meta.env.VITE_SOCKET_URL);
+    socket.connect();
+    channel = socket.channel("room:lobby", {});
+
+    channel
+      .join()
+      .receive("ok", (resp: unknown) => {
+        console.log("Joined successfully", resp);
+      })
+      .receive("error", (resp: unknown) => {
+        console.log("Unable to join", resp);
+      });
+  }
+
+  function sendLine(
+    x1: number,
+    y1: number,
+    x2: number,
+    y2: number,
+    color: string
+  ) {
+    const lineData = {
+      x1,
+      y1,
+      x2,
+      y2,
+      color,
+    };
+
+    channel.push("new_msg", { body: JSON.stringify(lineData) });
+  }
 
   let canvasContainer: any = null;
   let p5: any;
@@ -25,7 +62,15 @@
     p.setup = () => {
       canvas = p.createCanvas(width, height).parent(canvasContainer);
       canvas.style("border", "2px solid #000"); // Apply CSS style
-      p.background(bgOrEraserColor); // Set initial background
+      p.background(bgOrEraserColor);
+      connectSocket();
+
+      channel.on("new_msg", (payload: { body: string }) => {
+        const lineData = JSON.parse(payload.body);
+        console.log(lineData, "channerl on new msg");
+        p.stroke(lineData.color);
+        p.line(lineData.x1, lineData.y1, lineData.x2, lineData.y2);
+      });
     };
 
     p.windowResized = () => {
@@ -43,9 +88,9 @@
           p.strokeWeight(4); // Default stroke weight
         }
         p.stroke(color);
+        p.line(p.pmouseX, p.pmouseY, p.mouseX, p.mouseY);
+        sendLine(p.pmouseX, p.pmouseY, p.mouseX, p.mouseY, color);
       });
-
-      p.line(p.pmouseX, p.pmouseY, p.mouseX, p.mouseY);
     };
   };
 
