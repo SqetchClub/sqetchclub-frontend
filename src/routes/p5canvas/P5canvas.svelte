@@ -24,7 +24,7 @@
 
     p.setup = () => {
       canvas = p.createCanvas(width, height).parent(canvasContainer);
-      canvas.style("outline", "2px solid #000"); // Apply CSS style
+      canvas.style("border", "2px solid #000"); // Apply CSS style
       p.background(bgOrEraserColor); // Set initial background
     };
 
