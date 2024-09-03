@@ -8,7 +8,7 @@
 
   function connectSocket() {
     console.log("connecting to socket");
-    let socket = new Socket("wss://sqetchclub.fly.dev/socket");
+    let socket = new Socket(import.meta.env.VITE_SOCKET_URL);
     socket.connect();
     channel = socket.channel("room:lobby", {});
 
