@@ -1,0 +1,26 @@
+name: Push to Fork
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  push-to-fork:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Git
+        run: |
+          git config --global zuzokim 'github-actions[bot]'
+          git config --global zuzokim@gmail.com 'github-actions[bot]@users.noreply.github.com'
+
+      - name: Push to fork
+        env:
+          FORK_PAT: ${{ secrets.FORK_PAT }}
+        run: |
+          git remote add fork https://x-access-token:${FORK_PAT}@github.com/zuzokim/sqetchclub-fe-poc.git
+          git push fork main:main
