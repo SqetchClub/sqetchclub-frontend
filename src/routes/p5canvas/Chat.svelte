@@ -12,10 +12,10 @@
     socket.connect();
     channel = socket.channel("room:lobby", {});
 
-    channel.on("new_msg", (payload: { body: string }) => {
+    channel.on("new_msg", (payload: { body: string; nickname: string }) => {
       messages = [
         ...messages,
-        `[${new Date().toLocaleTimeString()}] ${payload.body}`,
+        `[${new Date().toLocaleTimeString()}] ${payload.nickname}: ${payload.body}`,
       ];
     });
 
