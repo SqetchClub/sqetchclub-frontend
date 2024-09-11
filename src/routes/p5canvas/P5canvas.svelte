@@ -36,7 +36,7 @@
       color,
     };
 
-    channel.push("new_msg", { body: JSON.stringify(lineData) });
+    channel.push("new_sqetch", { body: JSON.stringify(lineData) });
   }
 
   let canvasContainer: any = null;
@@ -65,9 +65,9 @@
       p.background(bgOrEraserColor);
       connectSocket();
 
-      channel.on("new_msg", (payload: { body: string }) => {
+      channel.on("new_sqetch", (payload: { body: string }) => {
         const lineData = JSON.parse(payload.body);
-        console.log(lineData, "channerl on new msg");
+        console.log(lineData, "channerl on new sqetch");
         p.stroke(lineData.color);
         p.line(lineData.x1, lineData.y1, lineData.x2, lineData.y2);
       });
