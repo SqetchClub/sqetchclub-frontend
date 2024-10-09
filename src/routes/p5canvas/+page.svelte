@@ -1,11 +1,13 @@
 <script>
+  import { onMount } from "svelte";
   import P5canvas from "./P5canvas.svelte";
   import Chat from "./Chat.svelte";
+  let text = "Now Sqetch & Guess the word!!";
+  let headerText = text;
 </script>
 
 <main>
-  <h1>P5canvas with Svelte</h1>
-
+  <h1 class="typewriter">&gt;0&lt; {headerText}</h1>
   <div class="container">
     <P5canvas />
     <Chat />
@@ -13,21 +15,25 @@
 </main>
 
 <svelte:head>
-  <title>P5canvas with Svelte</title>
-  <meta name="description" content="P5canvas with Svelte" />
+  <title>{text}</title>
+  <meta name="description" content={text} />
 </svelte:head>
 
 <style>
   main {
+    height: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    padding: 16px;
   }
   .container {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    height:100%;
-    gap: 20px;
+    display: flex;
+    gap: 8px;
+    width: 100%;
+    min-width: 300px;
+    max-width: 800px;
+    padding: 16px;
   }
 </style>

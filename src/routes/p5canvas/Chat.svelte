@@ -2,7 +2,13 @@
   import { Socket, Channel } from "phoenix";
   import { onMount } from "svelte";
 
-  let messages: string[] = [];
+  let messages: {
+    time: string;
+    nickname: string;
+    text: string;
+    self: boolean;
+  }[] = [];
+  let myNickname: string = "";
   let chatInput: HTMLInputElement;
   let channel: Channel;
 
@@ -13,9 +19,17 @@
     channel = socket.channel("room:lobby", {});
 
     channel.on("new_msg", (payload: { body: string; nickname: string }) => {
+      if (!myNickname) {
+        myNickname = payload.nickname;
+      }
       messages = [
         ...messages,
-        `[${new Date().toLocaleTimeString()}] ${payload.nickname}: ${payload.body}`,
+        {
+          time: new Date().toLocaleTimeString(),
+          nickname: payload.nickname,
+          text: payload.body,
+          self: payload.nickname === myNickname,
+        },
       ];
     });
 
@@ -45,7 +59,12 @@
   <div class="container">
     <div class="chat-pannel">
       {#each messages as message}
-        <p>{message}</p>
+        <p class={message.self ? "self-message" : ""}>
+          <span>{message.time}</span>
+          <span class="nickname">{message.nickname}</span>
+          <br />
+          <span class="text">{message.text}</span>
+        </p>
       {/each}
     </div>
     <input
@@ -60,23 +79,33 @@
 
 <style>
   .container {
-    min-width: 400px;
-    min-height: 880px;
+    width: 280px;
+    min-height: 100%;
+    max-height: 50dvh;
+    height: 100%;
     display: flex;
     flex-direction: column;
-    justify-content: flex-end;
-    gap: 24px;
+    background-color: white;
   }
   .chat-pannel {
     flex-grow: 1;
     overflow-y: auto;
     padding: 16px;
-    background-color: white;
-    border: 2px solid #000;
+  }
+
+  .nickname {
+    background-color: #eee;
+  }
+  .nickname,
+  .text {
+    font-weight: bold;
+  }
+  .self-message {
+    color: #0000ff; 
   }
   .chat-input {
-    padding: 16px;
+    padding: 28px 16px;
     border: none;
-    border: 2px solid #000;
+    border-top: 1px dashed;
   }
 </style>

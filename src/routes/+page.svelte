@@ -1,59 +1,66 @@
 <script>
-	import Counter from './Counter.svelte';
-	import welcome from '$lib/images/svelte-welcome.webp';
-	import welcome_fallback from '$lib/images/svelte-welcome.png';
+  import { onMount } from "svelte";
+  import Entrance from "./Entrance.svelte";
+
+  let text = "Welcome to SqetchClub!!";
+  let welcomeText = "";
+  let index = 0;
+
+  function startTyping() {
+    welcomeText = "";
+    index = 0;
+    const interval = setInterval(() => {
+      if (index < text.length) {
+        welcomeText += text[index];
+        index++;
+      } else {
+        clearInterval(interval);
+        setTimeout(startTyping, 8000); 
+      }
+    }, 150); 
+  }
+
+  onMount(() => {
+    startTyping();
+  });
 </script>
 
 <svelte:head>
-	<title>Home</title>
-	<meta name="description" content="Svelte demo app" />
+  <title>{text}</title>
+  <meta name="description" content={text} />
 </svelte:head>
 
 <section>
-	<h1>
-		<span class="welcome">
-			<picture>
-				<source srcset={welcome} type="image/webp" />
-				<img src={welcome_fallback} alt="Welcome" />
-			</picture>
-		</span>
-
-		to your new<br />SvelteKit app
-	</h1>
-
-	<h2>
-		try editing <strong>src/routes/+page.svelte</strong>
-	</h2>
-
-	<Counter />
+  <h1>&gt;_&lt;<br /><span class="typewriter">{welcomeText}</span></h1>
+  <Entrance />
 </section>
 
 <style>
-	section {
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-		flex: 0.6;
-	}
+  section {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+  }
 
-	h1 {
-		width: 100%;
-	}
+  .typewriter {
+    display: inline-block;
+    overflow: hidden;
+    border-right: 3px solid black; /* Cursor effect */
+    white-space: nowrap;
+    animation: blink-caret 0.75s step-end infinite;
+  }
 
-	.welcome {
-		display: block;
-		position: relative;
-		width: 100%;
-		height: 0;
-		padding: 0 0 calc(100% * 495 / 2048) 0;
-	}
-
-	.welcome img {
-		position: absolute;
-		width: 100%;
-		height: 100%;
-		top: 0;
-		display: block;
-	}
+  @keyframes blink-caret {
+    from,
+    to {
+      border-color: transparent;
+    }
+    50% {
+      border-color: black;
+    }
+  }
 </style>
