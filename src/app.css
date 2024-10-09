@@ -1,107 +1,119 @@
-@import '@fontsource/fira-mono';
+/*
+0. set font
+*/
 
-:root {
-	--font-body: Arial, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu,
-		Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-	--font-mono: 'Fira Mono', monospace;
-	--color-bg-0: rgb(202, 216, 228);
-	--color-bg-1: hsl(209, 36%, 86%);
-	--color-bg-2: hsl(224, 44%, 95%);
-	--color-theme-1: #ff3e00;
-	--color-theme-2: #4075a6;
-	--color-text: rgba(0, 0, 0, 0.7);
-	--column-width: 42rem;
-	--column-margin-top: 4rem;
-	font-family: var(--font-body);
-	color: var(--color-text);
+/* Import font */
+@font-face {
+  font-family: "DepartureMono-Regular";
+  src: url("../static/fonts/DepartureMono-Regular.woff") format("woff"),
+    url("../static/fonts/DepartureMono-Regular.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
 }
 
+* {
+  font-family: "DepartureMono-Regular", "Arial", Roboto, "Helvetica Neue",
+    sans-serif;
+}
+
+/*
+  1. Use a more-intuitive box-sizing model.
+*/
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/*
+  2. Remove default margin
+*/
+* {
+  margin: 0;
+}
+
+/*
+  Typographic tweaks!
+  3. Add accessible line-height
+  4. Improve text rendering
+*/
 body {
-	min-height: 100vh;
-	margin: 0;
-	background-attachment: fixed;
-	background-color: var(--color-bg-1);
-	background-size: 100vw 100vh;
-	background-image: radial-gradient(
-			50% 50% at 50% 50%,
-			rgba(255, 255, 255, 0.75) 0%,
-			rgba(255, 255, 255, 0) 100%
-		),
-		linear-gradient(180deg, var(--color-bg-0) 0%, var(--color-bg-1) 15%, var(--color-bg-2) 50%);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  background-image: url("lib/images/bg.svg");
 }
 
+/*
+  5. Improve media defaults
+*/
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+/*
+  6. Remove built-in form typography styles
+*/
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+
+/*
+  7. Avoid text overflows
+*/
+p,
 h1,
 h2,
-p {
-	font-weight: 400;
-}
-
-p {
-	line-height: 1.5;
-}
-
-a {
-	color: var(--color-theme-1);
-	text-decoration: none;
-}
-
-a:hover {
-	text-decoration: underline;
+h3,
+h4,
+h5,
+h6 {
+  overflow-wrap: break-word;
 }
 
 h1 {
-	font-size: 2rem;
-	text-align: center;
+  font-size: 24px;
 }
 
-h2 {
-	font-size: 1rem;
+p {
+  font-size: 12px;
 }
 
-pre {
-	font-size: 16px;
-	font-family: var(--font-mono);
-	background-color: rgba(255, 255, 255, 0.45);
-	border-radius: 3px;
-	box-shadow: 2px 2px 6px rgb(255 255 255 / 25%);
-	padding: 0.5em;
-	overflow-x: auto;
-	color: var(--color-text);
+@media (max-width: 720px) {
+  h1 {
+    font-size: 20px;
+  }
+
+  p {
+    font-size: 10px;
+  }
 }
 
-.text-column {
-	display: flex;
-	max-width: 48rem;
-	flex: 0.6;
-	flex-direction: column;
-	justify-content: center;
-	margin: 0 auto;
+/*
+  8. Create a root stacking context
+*/
+#root,
+#__next {
+  isolation: isolate;
 }
 
-input,
-button {
-	font-size: inherit;
-	font-family: inherit;
+a {
+  color: var(--color-theme-1);
+  text-decoration: none;
 }
 
-button:focus:not(:focus-visible) {
-	outline: none;
+a:hover {
+  text-decoration: underline;
 }
 
-@media (min-width: 720px) {
-	h1 {
-		font-size: 2.4rem;
-	}
-}
-
-.visually-hidden {
-	border: 0;
-	clip: rect(0 0 0 0);
-	height: auto;
-	margin: 0;
-	overflow: hidden;
-	padding: 0;
-	position: absolute;
-	width: 1px;
-	white-space: nowrap;
+ul,
+ol {
+  list-style: none;
 }
