@@ -44,37 +44,36 @@
   let canvas: any;
 
   const colors = [
-    "#FF0000", // Red
-    "#FFA500", // Orange
-    "#FFFF00", // Yellow
-    "#008000", // Green
-    "#0000FF", // Blue
-    "#800080", // Purple
-    "#FFC0CB", // Pink
+    "#000", //black
+    "#FFE400", //yellow
+    "#6AF217", //green
+    "#EF120C", //red
+    "#0038FF", //blue
   ];
   const currentColor = writable("#000"); // Default color
   const bgOrEraserColor = "#fff"; // Eraser color
 
   const sketch = (p: any) => {
-    const width = 800; //canvasContainer.offsetWidth;
-    const height = 800; //canvasContainer.offsetHeight;
-
+    const canvasContainerWidth = canvasContainer.clientWidth;
+    const canvasContainerHeight = canvasContainer.clientWidth;
     p.setup = () => {
-      canvas = p.createCanvas(width, height).parent(canvasContainer);
-      canvas.style("border", "2px solid #000"); // Apply CSS style
+      canvas = p
+        .createCanvas(canvasContainerWidth, canvasContainerHeight)
+        .parent(canvasContainer);
       p.background(bgOrEraserColor);
       connectSocket();
 
       channel.on("new_sqetch", (payload: { body: string }) => {
         const lineData = JSON.parse(payload.body);
-        console.log(lineData, "channerl on new sqetch");
         p.stroke(lineData.color);
         p.line(lineData.x1, lineData.y1, lineData.x2, lineData.y2);
       });
     };
 
     p.windowResized = () => {
-      p.resizeCanvas(width, height);
+      const canvasContainerWidth = canvasContainer.clientWidth;
+      const canvasContainerHeight = canvasContainerWidth;
+      p.resizeCanvas(canvasContainerWidth, canvasContainerHeight);
       p.background(bgOrEraserColor); // Reset background on resize
     };
 
@@ -129,25 +128,19 @@
   .container {
     display: flex;
     flex-direction: column;
-    gap: 24px;
     align-items: center;
     width: 100%;
-    height: 100%;
-    margin-bottom: 160px;
   }
 
   .canvas-container {
     width: 100%;
-    display: flex;
-    justify-content: center;
   }
 
   .palette {
-    width: 800px;
-    height: 90px;
+    width: 100%;
+    height: 80px;
     display: flex;
     justify-content: center;
-    outline: 2px solid #000;
     align-items: center;
   }
 
@@ -158,10 +151,6 @@
     border: none;
   }
 
-  .color-swatch:not(:last-child) {
-    border-right: 2px solid #000;
-  }
-
   .eraser {
     width: 100%;
     height: 100%;
@@ -170,5 +159,6 @@
     align-items: center;
     cursor: pointer;
     border: none;
+    border-top: 1px dashed;
   }
 </style>
